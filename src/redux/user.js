@@ -1,6 +1,42 @@
 import axios from "axios";
 import ACTIONS from "./app.constants";
+import xml2js from "xml2js";
 
+// // //CODE FOR READING XML FILE
+
+const getBaseUrlFromXml = async () => {
+  const xmlFilePath = "/AppConfigure.xml";
+  let baseUrl = "";
+
+  try {
+    const response = await axios.get(xmlFilePath, {
+      headers: { "Content-Type": "application/xml" },
+    });
+    const xmlData = response.data;
+console.log(xmlData)
+    // Parse XML data
+    const parser = new xml2js.Parser();
+    const result = await parser.parseStringPromise(xmlData);
+    console.log(result)
+
+    // Extract baseUrl from correct XML structure
+    baseUrl = result?.configuration?.baseUrl?.[0] || "";
+    console.log(baseUrl)
+  } catch (error) {
+    console.error("Error fetching XML file:", error);
+  }
+
+  return baseUrl;
+};
+
+let BASE_URL = "";
+getBaseUrlFromXml().then((url) => {
+  BASE_URL = url;
+  console.log("Base URL:", BASE_URL);
+});
+
+
+// //****************************** **********************************
 
 //For Nisa Sultan DHA Phase 4 and Lake City
 //const BASE_URL = 'https://192.168.100.5:8443/api';
@@ -13,10 +49,9 @@ import ACTIONS from "./app.constants";
 //For Nisa Sultan Gulber
 //const BASE_URL = 'https://192.168.10.2:8443/api';
 
-//const BASE_URL = "https://localhost:5001/api";
+// const BASE_URL = "https://localhost:5001/api";
 
-
-const BASE_URL = "https://10.44.1.137:8443/api";
+// const BASE_URL = "https://192.168.100.7:8443/api";
 
 //const BASE_URL = "https://192.168.10.201:8443/api";
 //For Nisa Sultan Johar Townn
@@ -30,7 +65,6 @@ const BASE_URL = "https://10.44.1.137:8443/api";
 
 //For CLUCKIN Sargodha
 //const BASE_URL = 'https://192.168.0.2:8443/api';
-
 
 //For ABU YOUSAF PIA Society Lahore
 //const BASE_URL = 'https://192.168.0.105:8443/api';
@@ -49,9 +83,6 @@ const BASE_URL = "https://10.44.1.137:8443/api";
 // const BASE_URL = 'https://192.168.100.2:8443/api';
 // const BASE_URL = 'https://192.168.1.5:8443/api';
 //http://192.168.100.7:8080/index.html
-
-
-
 
 // Action Creators
 const setUser = (userObj) => {
@@ -447,7 +478,7 @@ export const saveOrderBegin = (payload) => (dispatch) => {
         dispatch({
           type: ACTIONS.RESET_ERROR_STATE,
           isError: false,
-          message: '',
+          message: "",
         });
       }, 3000);
     });
