@@ -13,15 +13,15 @@ const getBaseUrlFromXml = async () => {
       headers: { "Content-Type": "application/xml" },
     });
     const xmlData = response.data;
-console.log(xmlData)
+    // console.log(xmlData)
     // Parse XML data
     const parser = new xml2js.Parser();
     const result = await parser.parseStringPromise(xmlData);
-    console.log(result)
+    // console.log(result)
 
     // Extract baseUrl from correct XML structure
     baseUrl = result?.configuration?.baseUrl?.[0] || "";
-    console.log(baseUrl)
+    // console.log(baseUrl)
   } catch (error) {
     console.error("Error fetching XML file:", error);
   }
@@ -32,9 +32,8 @@ console.log(xmlData)
 let BASE_URL = "";
 getBaseUrlFromXml().then((url) => {
   BASE_URL = url;
-  console.log("Base URL:", BASE_URL);
+  // console.log("Base URL:", BASE_URL);
 });
-
 
 // //****************************** **********************************
 
